@@ -4,6 +4,9 @@ const authorController = require("../controllers/authorController");
 
 router.route("/").get(authorController.index);
 
-router.route("/:authorid").get(authorController.getSingleAuthor);
+router
+  .route("/:authorid")
+  .get(authorController.getSingleAuthor)
+  .post(authorController.addBook);
 
 module.exports = router;
