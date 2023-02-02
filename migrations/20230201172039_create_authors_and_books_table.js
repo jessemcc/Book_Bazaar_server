@@ -2,7 +2,14 @@ exports.up = function (knex) {
   return knex.schema
     .createTable("authors", (table) => {
       table.increments("id").primary();
-      table.string("name").notNullable();
+      table.string("first_name").notNullable();
+      table.string("last_name").notNullable();
+      table.string("email").notNullable();
+      table.string("address").notNullable();
+      table.string("city").notNullable();
+      table.string("province").notNullable();
+      table.string("postal_code").notNullable();
+      table.string("password").notNullable();
       table.text("about").notNullable();
       table.string("image");
       table.integer("number_of_books").notNullable();

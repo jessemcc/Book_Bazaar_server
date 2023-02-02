@@ -13,6 +13,33 @@ exports.getSingleAuthor = (req, res) => {
     });
 };
 
+// ADD AUTHOR ========================================
+exports.addAuthor = (req, res) => {
+  const { name, about, image, number_of_books } = req.body;
+
+  if (!name || !about || !image) {
+    return res.status(405).json({
+      error: true,
+      message: "Missing information to add new Author",
+      specific: error,
+    });
+  }
+
+  knex("authors")
+    .insert({
+      name,
+      about,
+      image,
+      number_of_books,
+    })
+    .then((author) => {
+      const newAuthorURL = `authors/${author}`;
+      res.status(201).location(newAuthorURL).send(newAuthorURL);
+      console.log(newBookURL);
+    })
+    .catch((err) => res.status(400).send(`Error adding new author: ${err}`));
+};
+
 // ADD BOOK =========================================
 exports.addBook = (req, res) => {
   const {
