@@ -9,4 +9,6 @@ router
   .get(authorController.getSingleAuthor)
   .post(authorController.addBook);
 
+router.route("/:authorid/books").get(authorController.getBooksFromAuthor);
+
 module.exports = router;
