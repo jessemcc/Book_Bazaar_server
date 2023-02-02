@@ -29,7 +29,6 @@ exports.addBook = (req, res) => {
   const author_id = req.params.authorid;
 
   if (
-    !author_id ||
     !book_name ||
     !description ||
     !language ||
@@ -48,7 +47,6 @@ exports.addBook = (req, res) => {
 
   knex("books")
     .insert({
-      id,
       author_id,
       book_name,
       description,
