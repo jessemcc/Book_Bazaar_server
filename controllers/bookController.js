@@ -1,5 +1,14 @@
 const knex = require("knex")(require("../knexfile"));
 
+// GET SINGLE BOOK ====================================
+exports.getSingleBook = (req, res) => {
+  knex("books")
+    .where({ id: req.params.bookid })
+    .then((data) => {
+      res.json(data);
+    });
+};
+
 // GET ALL BOOKS ====================================
 exports.index = (_req, res) => {
   knex("books")
