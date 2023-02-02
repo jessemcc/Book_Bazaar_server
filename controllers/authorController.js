@@ -40,6 +40,19 @@ exports.addAuthor = (req, res) => {
     .catch((err) => res.status(400).send(`Error adding new author: ${err}`));
 };
 
+// GET ALL BOOKS FROM ONE AUTHOR =================================
+exports.getBooksFromAuthor = (req, res) => {
+  knex("books")
+    .where({ author_id: req.params.authorid })
+    .then((books) => {
+      res.json(books);
+    })
+    .catch((error) => {
+      res.status(404).send("No Books found at by this author.");
+      console.log(error);
+    });
+};
+
 // ADD BOOK =========================================
 exports.addBook = (req, res) => {
   const {
