@@ -96,7 +96,7 @@ exports.getBooksFromAuthor = (req, res) => {
     });
 };
 
-// ADD BOOK =========================================
+// ADD BOOK TO AUTHOR =========================================
 exports.addBook = (req, res) => {
   const {
     book_name,
@@ -158,6 +158,83 @@ exports.deleteBook = (req, res) => {
     })
     .catch((error) => {
       res.status(400).send(`Failed to delete Book: ${error}`);
+    });
+};
+
+// EDIT AUTHOR INFO ================================================
+exports.editAuthor = (req, res) => {
+  const {
+    first_name,
+    last_name,
+    email,
+    address,
+    city,
+    province,
+    postal_code,
+    password,
+    about,
+    image,
+    number_of_books,
+  } = req.body;
+
+  const updatedAuthor = {
+    first_name,
+    last_name,
+    email,
+    address,
+    city,
+    province,
+    postal_code,
+    password,
+    about,
+    image,
+    number_of_books,
+  };
+
+  knex("authors")
+    .where({ id: req.params.authorid })
+    .update(updatedAuthor)
+    .then((updatedRow) => {
+      res.json("Author update was successful");
+    })
+    .catch((error) => {
+      res.status(400).send(`Error updating Author: ${error}`);
+    });
+};
+
+// EDIT BOOK INFO ===========================================
+exports.editBook = (req, res) => {
+  const {
+    book_name,
+    description,
+    language,
+    genre,
+    image,
+    price,
+    stock,
+    page_numbers,
+  } = req.body;
+
+  const updatedBook = {
+    book_name,
+    description,
+    language,
+    genre,
+    image,
+    price,
+    stock,
+    page_numbers,
+  };
+
+  knex("books")
+    .where({ id: req.params.bookid })
+    .where({ author_id: req.params.authorid })
+    .update(updatedBook)
+    .then((updatedRow) => {
+      res.json(`Book update was successful`);
+    })
+    .catch((error) => {
+      res.status(400).send(`Error updating book: ${error}`);
     });
 };
 

@@ -8,10 +8,14 @@ router
   .route("/:authorid")
   .get(authorController.getSingleAuthor)
   .post(authorController.addBook)
-  .delete(authorController.deleteAuthor);
+  .delete(authorController.deleteAuthor)
+  .patch(authorController.editAuthor);
 
 router.route("/:authorid/books").get(authorController.getBooksFromAuthor);
 
-router.route("/:authorid/:bookid").delete(authorController.deleteBook);
+router
+  .route("/:authorid/:bookid")
+  .delete(authorController.deleteBook)
+  .patch(authorController.editBook);
 
 module.exports = router;
