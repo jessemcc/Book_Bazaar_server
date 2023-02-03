@@ -15,9 +15,32 @@ exports.getSingleAuthor = (req, res) => {
 
 // ADD AUTHOR ========================================
 exports.addAuthor = (req, res) => {
-  const { name, about, image, number_of_books } = req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    address,
+    city,
+    province,
+    postal_code,
+    password,
+    about,
+    image,
+    number_of_books,
+  } = req.body;
 
-  if (!name || !about || !image) {
+  if (
+    !first_name ||
+    !last_name ||
+    !email ||
+    !address ||
+    !city ||
+    !province ||
+    !postal_code ||
+    !password ||
+    !about ||
+    !image
+  ) {
     return res.status(405).json({
       error: true,
       message: "Missing information to add new Author",
@@ -27,7 +50,14 @@ exports.addAuthor = (req, res) => {
 
   knex("authors")
     .insert({
-      name,
+      first_name,
+      last_name,
+      email,
+      address,
+      city,
+      province,
+      postal_code,
+      password,
       about,
       image,
       number_of_books,
@@ -35,9 +65,22 @@ exports.addAuthor = (req, res) => {
     .then((author) => {
       const newAuthorURL = `authors/${author}`;
       res.status(201).location(newAuthorURL).send(newAuthorURL);
-      console.log(newBookURL);
+      console.log(newAuthorURL);
     })
     .catch((err) => res.status(400).send(`Error adding new author: ${err}`));
+};
+
+// DELETE AUTHOR =====================================================
+exports.deleteAuthor = (req, res) => {
+  knex("authors")
+    .delete()
+    .where({ id: req.params.authorid })
+    .then(() => {
+      res.status(204).send("Successfully deleted author");
+    })
+    .catch((error) => {
+      res.status(400).send(`Failed to delete account: ${error}`);
+    });
 };
 
 // GET ALL BOOKS FROM ONE AUTHOR =================================
@@ -101,6 +144,20 @@ exports.addBook = (req, res) => {
       const newBookURL = `books/${book}`;
       res.status(201).location(newBookURL).send(newBookURL);
       console.log(newBookURL);
+    });
+};
+
+// DELETE BOOK FROM AUTHOR ===============================================
+exports.deleteBook = (req, res) => {
+  knex("authors")
+    .delete()
+    .where({ id: req.params.bookid })
+    .where({ author_id: req.params.authorid })
+    .then(() => {
+      res.status(204).send("Successfully deleted Book");
+    })
+    .catch((error) => {
+      res.status(400).send(`Failed to delete Book: ${error}`);
     });
 };
 
