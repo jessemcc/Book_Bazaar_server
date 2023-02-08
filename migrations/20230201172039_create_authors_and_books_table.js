@@ -11,8 +11,8 @@ exports.up = function (knex) {
       table.string("postal_code").notNullable();
       table.string("password").notNullable();
       table.text("about").notNullable();
-      table.string("image");
-      table.integer("number_of_books").notNullable();
+      table.string("portrait").notNullable();
+      table.string("img_path").notNullable();
       table.timestamps(true, true);
     })
     .createTable("books", (table) => {
@@ -29,10 +29,11 @@ exports.up = function (knex) {
       table.text("description").notNullable();
       table.string("language").notNullable();
       table.string("genre").notNullable();
-      table.string("image").notNullable();
       table.decimal("price").notNullable();
       table.integer("stock").notNullable();
       table.integer("page_numbers").notNullable();
+      table.string("cover").notNullable();
+      table.string("img_path").notNullable();
       table.timestamps(true, true);
     });
 };

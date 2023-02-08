@@ -11,7 +11,10 @@ exports.getSingleBook = (req, res) => {
 
 // GET ALL BOOKS ====================================
 exports.index = (_req, res) => {
-  knex("books")
+  knex
+    .select("books.*", "authors.first_name", "authors.last_name")
+    .from("books")
+    .innerJoin("authors", "authors.id", "=", "books.author_id")
     .then((data) => {
       res.json(data);
     })
