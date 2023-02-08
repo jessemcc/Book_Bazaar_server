@@ -17,7 +17,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB arm balance black",
-      img_path: "/images/covers/iam-yoga-NB-arm-balance-black.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-arm-balance-black.jpg",
     },
     {
       author_id: 1,
@@ -30,7 +30,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB mediation tree black",
-      img_path: "/images/covers/iam-yoga-NB-meditation-tree-black.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-meditation-tree-black.jpg",
     },
     {
       author_id: 1,
@@ -43,7 +43,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB mediation all seasons black",
-      img_path: "/images/covers/iam-yoga-NB-meditation-all-seasons-black.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-meditation-all-seasons-black.jpg",
     },
     {
       author_id: 1,
@@ -56,7 +56,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB arm balance gold",
-      img_path: "/images/covers/iam-yoga-NB-arm-balance-gold.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-arm-balance-gold.jpg",
     },
     {
       author_id: 1,
@@ -69,7 +69,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB mediation all seasons gold",
-      img_path: "/images/covers/iam-yoga-NB-meditation-all-seasons-gold.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-meditation-all-seasons-gold.jpg",
     },
     {
       author_id: 1,
@@ -82,7 +82,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB tree pose black",
-      img_path: "/images/covers/iam-yoga-NB-tree-pose-black.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-tree-pose-black.jpg",
     },
     {
       author_id: 1,
@@ -95,7 +95,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB dancer gold",
-      img_path: "/images/covers/iam-yoga-NB-dancer-gold.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-dancer-gold.jpg",
     },
     {
       author_id: 1,
@@ -108,7 +108,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB back bend black",
-      img_path: "/images/covers/iam-yoga-NB-back-bend-black.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-back-bend-black.jpg",
     },
     {
       author_id: 1,
@@ -121,7 +121,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB mediation tree gold",
-      img_path: "/images/covers/iam-yoga-NB-meditation-tree-gold.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-meditation-tree-gold.jpg",
     },
     {
       author_id: 1,
@@ -134,7 +134,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 120,
       cover: "iam yoga NB back bend gold",
-      img_path: "/images/covers/iam-yoga-NB-back-bend-gold.jpg",
+      cover_path: "/images/covers/iam-yoga-NB-back-bend-gold.jpg",
     },
     {
       author_id: 2,
@@ -147,7 +147,7 @@ exports.seed = async function (knex) {
       stock: 15,
       page_numbers: 256,
       cover: "The World Today",
-      img_path: "/images/covers/the-world-today.jpg",
+      cover_path: "/images/covers/the-world-today.jpg",
     },
     {
       author_id: 2,
@@ -160,7 +160,7 @@ exports.seed = async function (knex) {
       stock: 25,
       page_numbers: 189,
       cover: "Future Designs",
-      img_path: "/images/covers/future-designs.jpg",
+      cover_path: "/images/covers/future-designs.jpg",
     },
     {
       author_id: 2,
@@ -173,7 +173,7 @@ exports.seed = async function (knex) {
       stock: 20,
       page_numbers: 303,
       cover: "History of Mankind",
-      img_path: "/images/covers/history-of-mankind.jpg",
+      cover_path: "/images/covers/history-of-mankind.jpg",
     },
     {
       author_id: 3,
@@ -186,7 +186,7 @@ exports.seed = async function (knex) {
       stock: 30,
       page_numbers: 356,
       cover: "In the Shadows",
-      img_path: "/images/covers/in-the-shadows.jpg",
+      cover_path: "/images/covers/in-the-shadows.jpg",
     },
     {
       author_id: 3,
@@ -199,7 +199,7 @@ exports.seed = async function (knex) {
       stock: 30,
       page_numbers: 287,
       cover: "Past Revenge",
-      img_path: "/images/covers/past-revenge.jpg",
+      cover_path: "/images/covers/past-revenge.jpg",
     },
     {
       author_id: 3,
@@ -212,7 +212,7 @@ exports.seed = async function (knex) {
       stock: 30,
       page_numbers: 320,
       cover: "No Time Left",
-      img_path: "/images/covers/no-time-left.png",
+      cover_path: "/images/covers/no-time-left.png",
     },
     {
       author_id: 3,
@@ -225,7 +225,7 @@ exports.seed = async function (knex) {
       stock: 30,
       page_numbers: 401,
       cover: "Gaia",
-      img_path: "/images/covers/gaia.png",
+      cover_path: "/images/covers/gaia.png",
     },
     {
       author_id: 3,
@@ -238,7 +238,7 @@ exports.seed = async function (knex) {
       stock: 30,
       page_numbers: 356,
       cover: "Happiness Reigns",
-      img_path: "/images/covers/happiness-reigns.png",
+      cover_path: "/images/covers/happiness-reigns.png",
     },
   ]);
 };

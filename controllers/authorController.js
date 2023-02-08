@@ -179,30 +179,6 @@ exports.editBook = (req, res) => {
     });
 };
 
-// GET ALL AUTHORS ====================================
-// exports.index = (_req, res) => {
-//   knex
-//     .select("*")
-//     .from("authors")
-//     .innerJoin("books", "books.author_id", "=", "authors.id")
-//     .then((data) => {
-//       res.status(200).json(data);
-//     })
-//     .catch((err) => res.status(400).send(`Error retrieving Warehouses ${err}`));
-// };
-
-// exports.index = (_req, res) => {
-//   knex
-//     .select("*")
-//     .from("authors")
-//     .join(knex.raw("natural full join books"))
-//     .where("books.author_id", "=", "authors.id")
-//     .then((data) => {
-//       res.status(200).json(data);
-//     })
-//     .catch((err) => res.status(400).send(`Error retrieving Warehouses ${err}`));
-// };
-
 exports.index = (_req, res) => {
   knex
     .select("authors.*", "books.*")
@@ -210,6 +186,7 @@ exports.index = (_req, res) => {
     .leftJoin("books", "authors.id", "books.author_id")
     .then((data) => {
       const authors = data.reduce((acc, curr) => {
+        const id = curr.id;
         const author = curr.first_name + " " + curr.last_name;
         const email = curr.email;
         const address = curr.address;
@@ -219,9 +196,10 @@ exports.index = (_req, res) => {
         const password = curr.password;
         const about = curr.about;
         const portrait = curr.portrait;
-        const img_path = curr.img_path;
+        const portrait_path = curr.portrait_path;
         if (!acc[author]) {
           acc[author] = {
+            id,
             author,
             email,
             address,
@@ -231,7 +209,7 @@ exports.index = (_req, res) => {
             password,
             about,
             portrait,
-            img_path,
+            portrait_path,
             books: [
               {
                 id: curr.id,
@@ -243,7 +221,7 @@ exports.index = (_req, res) => {
                 stock: curr.stock,
                 page_numbers: curr.page_numbers,
                 cover: curr.cover,
-                img_path: curr.img_path,
+                cover_path: curr.cover_path,
               },
             ],
           };
@@ -258,7 +236,7 @@ exports.index = (_req, res) => {
             stock: curr.stock,
             page_numbers: curr.page_numbers,
             cover: curr.cover,
-            img_path: curr.img_path,
+            cover_path: curr.cover_path,
           });
         }
         return acc;
