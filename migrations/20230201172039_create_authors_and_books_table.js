@@ -12,7 +12,7 @@ exports.up = function (knex) {
       table.string("password").notNullable();
       table.text("about").notNullable();
       table.string("portrait").notNullable();
-      table.string("img_path").notNullable();
+      table.string("portrait_path").notNullable();
       table.timestamps(true, true);
     })
     .createTable("books", (table) => {
@@ -33,7 +33,7 @@ exports.up = function (knex) {
       table.integer("stock").notNullable();
       table.integer("page_numbers").notNullable();
       table.string("cover").notNullable();
-      table.string("img_path").notNullable();
+      table.string("cover_path").notNullable();
       table.timestamps(true, true);
     });
 };
