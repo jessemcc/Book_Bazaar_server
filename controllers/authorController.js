@@ -179,69 +179,76 @@ exports.editBook = (req, res) => {
     });
 };
 
+// GET LIST OF ALL AUTHORS ================================================================
 exports.index = (_req, res) => {
+  knex("authors")
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((error) => {
+      res.status(400).json({
+        error: true,
+        message: "Server cannot be reached",
+        specific: error,
+      });
+    });
+};
+
+// GET REQUEST FOR ALL AUTHORS WITH LIST OF BOOKS BY THAT AUTHOR ==============================
+exports.getAuthorsWithBooks = (_req, res) => {
   knex
     .select("authors.*", "books.*")
     .from("authors")
-    .leftJoin("books", "authors.id", "books.author_id")
-    .then((data) => {
-      const authors = data.reduce((acc, curr) => {
-        const id = curr.id;
-        const author = curr.first_name + " " + curr.last_name;
-        const email = curr.email;
-        const address = curr.address;
-        const city = curr.city;
-        const province = curr.province;
-        const postal_code = curr.postal_code;
-        const password = curr.password;
-        const about = curr.about;
-        const portrait = curr.portrait;
-        const portrait_path = curr.portrait_path;
-        if (!acc[author]) {
-          acc[author] = {
-            id,
-            author,
-            email,
-            address,
-            city,
-            province,
-            postal_code,
-            password,
-            about,
-            portrait,
-            portrait_path,
+    .join("books", "authors.id", "books.author_id")
+    .then((rows) => {
+      const authors = rows.reduce((acc, row) => {
+        const author = acc.find((author) => author.id === row.author_id);
+        if (!author) {
+          acc.push({
+            id: row.author_id,
+            first_name: row.first_name,
+            last_name: row.last_name,
+            email: row.email,
+            address: row.address,
+            city: row.city,
+            province: row.province,
+            postal_code: row.postal_code,
+            password: row.password,
+            about: row.about,
+            portrait: row.portrait,
+            portrait_path: row.portrait_path,
             books: [
               {
-                id: curr.id,
-                book_name: curr.book_name,
-                description: curr.description,
-                language: curr.language,
-                genre: curr.genre,
-                price: curr.price,
-                stock: curr.stock,
-                page_numbers: curr.page_numbers,
-                cover: curr.cover,
-                cover_path: curr.cover_path,
+                id: row.id,
+                book_name: row.book_name,
+                description: row.description,
+                language: row.language,
+                genre: row.genre,
+                price: row.price,
+                stock: row.stock,
+                page_numbers: row.page_numbers,
+                cover: row.cover,
+                cover_path: row.cover_path,
               },
             ],
-          };
+          });
         } else {
-          acc[author].books.push({
-            id: curr.id,
-            book_name: curr.book_name,
-            description: curr.description,
-            language: curr.language,
-            genre: curr.genre,
-            price: curr.price,
-            stock: curr.stock,
-            page_numbers: curr.page_numbers,
-            cover: curr.cover,
-            cover_path: curr.cover_path,
+          author.books.push({
+            id: row.id,
+            book_name: row.book_name,
+            description: row.description,
+            language: row.language,
+            genre: row.genre,
+            price: row.price,
+            stock: row.stock,
+            page_numbers: row.page_numbers,
+            cover: row.cover,
+            cover_path: row.cover_path,
           });
         }
         return acc;
-      }, {});
-      res.status(200).json(Object.values(authors));
+      }, []);
+      res.send(authors);
     })
     .catch((err) =>
       res.status(400).send(`Error retrieving authors and books: ${err}`)

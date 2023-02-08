@@ -4,6 +4,8 @@ const authorController = require("../controllers/authorController");
 
 router.route("/").get(authorController.index);
 
+router.route("/books").get(authorController.getAuthorsWithBooks);
+
 router
   .route("/:authorid")
   .get(authorController.getSingleAuthor)
