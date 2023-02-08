@@ -13,63 +13,6 @@ exports.getSingleAuthor = (req, res) => {
     });
 };
 
-// ADD AUTHOR ========================================
-exports.addAuthor = (req, res) => {
-  const {
-    first_name,
-    last_name,
-    email,
-    address,
-    city,
-    province,
-    postal_code,
-    password,
-    about,
-    image,
-    number_of_books,
-  } = req.body;
-
-  if (
-    !first_name ||
-    !last_name ||
-    !email ||
-    !address ||
-    !city ||
-    !province ||
-    !postal_code ||
-    !password ||
-    !about ||
-    !image
-  ) {
-    return res.status(405).json({
-      error: true,
-      message: "Missing information to add new Author",
-      specific: error,
-    });
-  }
-
-  knex("authors")
-    .insert({
-      first_name,
-      last_name,
-      email,
-      address,
-      city,
-      province,
-      postal_code,
-      password,
-      about,
-      image,
-      number_of_books,
-    })
-    .then((author) => {
-      const newAuthorURL = `authors/${author}`;
-      res.status(201).location(newAuthorURL).send(newAuthorURL);
-      console.log(newAuthorURL);
-    })
-    .catch((err) => res.status(400).send(`Error adding new author: ${err}`));
-};
-
 // DELETE AUTHOR =====================================================
 exports.deleteAuthor = (req, res) => {
   knex("authors")
@@ -174,7 +117,6 @@ exports.editAuthor = (req, res) => {
     password,
     about,
     image,
-    number_of_books,
   } = req.body;
 
   const updatedAuthor = {
@@ -188,7 +130,6 @@ exports.editAuthor = (req, res) => {
     password,
     about,
     image,
-    number_of_books,
   };
 
   knex("authors")
@@ -239,10 +180,92 @@ exports.editBook = (req, res) => {
 };
 
 // GET ALL AUTHORS ====================================
+// exports.index = (_req, res) => {
+//   knex
+//     .select("*")
+//     .from("authors")
+//     .innerJoin("books", "books.author_id", "=", "authors.id")
+//     .then((data) => {
+//       res.status(200).json(data);
+//     })
+//     .catch((err) => res.status(400).send(`Error retrieving Warehouses ${err}`));
+// };
+
+// exports.index = (_req, res) => {
+//   knex
+//     .select("*")
+//     .from("authors")
+//     .join(knex.raw("natural full join books"))
+//     .where("books.author_id", "=", "authors.id")
+//     .then((data) => {
+//       res.status(200).json(data);
+//     })
+//     .catch((err) => res.status(400).send(`Error retrieving Warehouses ${err}`));
+// };
+
 exports.index = (_req, res) => {
-  knex("authors")
+  knex
+    .select("authors.*", "books.*")
+    .from("authors")
+    .leftJoin("books", "authors.id", "books.author_id")
     .then((data) => {
-      res.status(200).json(data);
+      const authors = data.reduce((acc, curr) => {
+        const author = curr.first_name + " " + curr.last_name;
+        const email = curr.email;
+        const address = curr.address;
+        const city = curr.city;
+        const province = curr.province;
+        const postal_code = curr.postal_code;
+        const password = curr.password;
+        const about = curr.about;
+        const portrait = curr.portrait;
+        const img_path = curr.img_path;
+        if (!acc[author]) {
+          acc[author] = {
+            author,
+            email,
+            address,
+            city,
+            province,
+            postal_code,
+            password,
+            about,
+            portrait,
+            img_path,
+            books: [
+              {
+                id: curr.id,
+                book_name: curr.book_name,
+                description: curr.description,
+                language: curr.language,
+                genre: curr.genre,
+                price: curr.price,
+                stock: curr.stock,
+                page_numbers: curr.page_numbers,
+                cover: curr.cover,
+                img_path: curr.img_path,
+              },
+            ],
+          };
+        } else {
+          acc[author].books.push({
+            id: curr.id,
+            book_name: curr.book_name,
+            description: curr.description,
+            language: curr.language,
+            genre: curr.genre,
+            price: curr.price,
+            stock: curr.stock,
+            page_numbers: curr.page_numbers,
+            cover: curr.cover,
+            img_path: curr.img_path,
+          });
+        }
+        return acc;
+      }, {});
+      res.status(200).json(Object.values(authors));
     })
-    .catch((err) => res.status(400).send(`Error retrieving Warehouses ${err}`));
+    .catch((err) =>
+      res.status(400).send(`Error retrieving authors and books: ${err}`)
+    );
 };
