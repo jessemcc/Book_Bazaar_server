@@ -14,11 +14,7 @@ exports.addAuthor = (req, res) => {
     about,
   } = req.body;
 
-  console.log(req.files.portrait);
-
-  const { name, data } = portrait;
-
-  console.log(name, data);
+  const portrait = req.files.portrait;
 
   if (
     !firstName ||
@@ -29,38 +25,56 @@ exports.addAuthor = (req, res) => {
     !province ||
     !postal ||
     !password ||
-    !about
+    !about ||
+    !portrait
   ) {
     return res.status(405).json({
       error: true,
       message: "Missing information to add new Author",
-      specific: error,
     });
   }
 
-  if (err) {
-    return console.error(err);
-  } else {
-    knex("authors")
-      .insert({
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        address,
-        city,
-        province,
-        postal_code: postal,
-        password,
-        about,
-      })
-      .then((author) => {
-        const newAuthorURL = `authors/${author}`;
-        res.status(200).location(newAuthorURL).send(newAuthorURL);
-        console.log(newAuthorURL);
+  // Store the image in a specific folder
+  const uploadPath = `public/images/portraits/${portrait.name}`;
+  const portrait_path = `/images/portraits/${portrait.name}`;
+  portrait.mv(uploadPath, (err) => {
+    if (err) {
+      return console.error(err);
+    }
+  });
+
+  // Insert data into the database
+  knex("authors")
+    .insert({
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      address,
+      city,
+      province,
+      postal_code: postal,
+      password,
+      about,
+      portrait: portrait.name,
+      portrait_path,
+    })
+    .then(([id]) => {
+      if (!id) {
+        return res.status(500).json({
+          error: true,
+          message: "Failed to add new Author",
+        });
+      }
+
+      const newAuthorURL = `authors/${id}`;
+      res.status(200).location(newAuthorURL).send(newAuthorURL);
+      console.log(newAuthorURL);
+    })
+    .catch((error) => {
+      return res.status(500).json({
+        error: true,
+        message: "Failed to add new Author",
+        specific: error,
       });
-    knex("author_portrait").insert({
-      name,
-      image: data,
     });
-  }
 };
