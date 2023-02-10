@@ -3,7 +3,9 @@ const knex = require("knex")(require("../knexfile"));
 // GET SINGLE BOOK ====================================
 exports.getSingleBook = (req, res) => {
   knex("books")
-    .where({ id: req.params.bookid })
+    .join("authors", "books.author_id", "=", "authors.id")
+    .select("books.*", "authors.first_name", "authors.last_name")
+    .where({ "books.id": req.params.bookid })
     .then((data) => {
       res.json(data);
     });
