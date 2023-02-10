@@ -35,9 +35,22 @@ exports.up = function (knex) {
       table.string("cover").notNullable();
       table.string("cover_path").notNullable();
       table.timestamps(true, true);
+    })
+    .createTable("cart", (table) => {
+      table.increments("id").notNullable();
+      table.integer("author_id").notNullable();
+      table.string("book_name").notNullable();
+      table.text("description").notNullable();
+      table.string("language").notNullable();
+      table.string("genre").notNullable();
+      table.decimal("price").notNullable();
+      table.integer("stock").notNullable();
+      table.integer("page_numbers").notNullable();
+      table.string("cover").notNullable();
+      table.string("cover_path").notNullable();
     });
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable("books").dropTable("authors");
+  return knex.schema.dropTable("books").dropTable("authors").dropTable("cart");
 };
