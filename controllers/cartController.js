@@ -70,12 +70,13 @@ exports.getItems = (_req, res) => {
     });
 };
 
-// DELETE ITEMS FROM CART ===========================================================
-exports.deleteItems = (req, res) => {
+//DELETE SINGLE ITEM FROM CART ============================================================
+exports.deleteItem = (req, res) => {
   knex("cart")
+    .where({ id: req.body.id })
     .delete()
     .then(() => {
-      res.send("Succesfully deleted all items from cart");
+      res.send("Successfully deleted item");
     })
     .catch((error) => {
       res.status(400).json({
