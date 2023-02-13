@@ -5,9 +5,6 @@ const cartController = require("../controllers/cartController");
 
 router.route("/").get(bookController.index);
 
-router
-  .route("/:bookid")
-  .get(bookController.getSingleBook)
-  .post(cartController.addToCart);
+router.route("/:bookid").get(bookController.getSingleBook);
 
 module.exports = router;
