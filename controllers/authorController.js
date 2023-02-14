@@ -168,7 +168,6 @@ exports.editBook = (req, res) => {
     description,
     language,
     genre,
-    image,
     price,
     stock,
     page_numbers,
@@ -179,15 +178,44 @@ exports.editBook = (req, res) => {
     description,
     language,
     genre,
-    image,
     price,
     stock,
     page_numbers,
   };
 
+  const cover = req.files && req.files.cover;
+  if (cover) {
+    const coverPath = `/images/covers/${cover.name}`;
+    updatedBook.cover = cover.name;
+    updatedBook.cover_path = coverPath;
+
+    knex("books")
+      .select("cover_path")
+      .where({ id: req.params.bookid })
+      .first()
+      .then((book) => {
+        if (book && book.cover_path) {
+          fs.unlink(`public${book.cover_path}`, (error) => {
+            if (error) {
+              console.error(`Error deleting cover file: ${error}`);
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(`Error retrieving book data: ${error}`);
+      });
+
+    const uploadPath = `public${coverPath}`;
+    cover.mv(uploadPath, (error) => {
+      if (error) {
+        console.error(`Error uploading cover file: ${error}`);
+      }
+    });
+  }
+
   knex("books")
     .where({ id: req.params.bookid })
-    .where({ author_id: req.params.authorid })
     .update(updatedBook)
     .then((updatedRow) => {
       res.json(`Book update was successful`);
