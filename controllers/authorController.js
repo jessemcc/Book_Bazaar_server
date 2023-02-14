@@ -13,19 +13,6 @@ exports.getSingleAuthor = (req, res) => {
     });
 };
 
-// DELETE AUTHOR =====================================================
-exports.deleteAuthor = (req, res) => {
-  knex("authors")
-    .delete()
-    .where({ id: req.params.authorid })
-    .then(() => {
-      res.status(204).send("Successfully deleted author");
-    })
-    .catch((error) => {
-      res.status(400).send(`Failed to delete account: ${error}`);
-    });
-};
-
 // GET ALL BOOKS FROM ONE AUTHOR =================================
 exports.getBooksFromAuthor = (req, res) => {
   knex("books")
@@ -106,20 +93,6 @@ exports.addBook = (req, res) => {
     });
 };
 
-// DELETE BOOK FROM AUTHOR ===============================================
-exports.deleteBook = (req, res) => {
-  knex("authors")
-    .delete()
-    .where({ id: req.params.bookid })
-    .where({ author_id: req.params.authorid })
-    .then(() => {
-      res.status(204).send("Successfully deleted Book");
-    })
-    .catch((error) => {
-      res.status(400).send(`Failed to delete Book: ${error}`);
-    });
-};
-
 // EDIT AUTHOR INFO ================================================
 exports.editAuthor = (req, res) => {
   const {
@@ -132,7 +105,6 @@ exports.editAuthor = (req, res) => {
     postal_code,
     password,
     about,
-    image,
   } = req.body;
 
   const updatedAuthor = {
@@ -145,8 +117,38 @@ exports.editAuthor = (req, res) => {
     postal_code,
     password,
     about,
-    image,
   };
+
+  const portrait = req.files && req.files.portrait;
+  if (portrait) {
+    const portraitPath = `/images/portraits/${portrait.name}`;
+    updatedAuthor.portrait = portrait.name;
+    updatedAuthor.portrait_path = portraitPath;
+
+    knex("authors")
+      .select("portrait_path")
+      .where({ id: req.params.authorid })
+      .first()
+      .then((author) => {
+        if (author && author.portrait_path) {
+          fs.unlink(`public${author.portrait_path}`, (error) => {
+            if (error) {
+              console.error(`Error deleting portrait file: ${error}`);
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(`Error retrieving author data: ${error}`);
+      });
+
+    const uploadPath = `public${portraitPath}`;
+    portrait.mv(uploadPath, (error) => {
+      if (error) {
+        console.error(`Error uploading portrait file: ${error}`);
+      }
+    });
+  }
 
   knex("authors")
     .where({ id: req.params.authorid })

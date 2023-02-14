@@ -6,7 +6,7 @@ exports.postToken = async (req, res) => {
   const { email, password } = req.body;
 
   const author = await knex("authors").where({ email }).first();
-  if (author.password === password) {
+  if (author && author.password === password) {
     const authorName = `${author.first_name} ${author.last_name}`;
     const token = jwt.sign(
       {
