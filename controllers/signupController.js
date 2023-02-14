@@ -34,16 +34,14 @@ exports.addAuthor = (req, res) => {
     });
   }
 
-  // Store the image in a specific folder
   const uploadPath = `public/images/portraits/${portrait.name}`;
   const portrait_path = `/images/portraits/${portrait.name}`;
-  portrait.mv(uploadPath, (err) => {
-    if (err) {
-      return console.error(err);
+  portrait.mv(uploadPath, (error) => {
+    if (error) {
+      return console.error(error);
     }
   });
 
-  // Insert data into the database
   knex("authors")
     .insert({
       first_name: firstName,

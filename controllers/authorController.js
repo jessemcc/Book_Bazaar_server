@@ -46,23 +46,24 @@ exports.addBook = (req, res) => {
     description,
     language,
     genre,
-    image,
     price,
     stock,
     page_numbers,
+    author_id,
   } = req.body;
 
-  const author_id = req.params.authorid;
+  const cover = req.files.cover;
 
   if (
     !book_name ||
     !description ||
     !language ||
     !genre ||
-    !image ||
     !price ||
     !stock ||
-    !page_numbers
+    !page_numbers ||
+    !cover ||
+    !author_id
   ) {
     return res.status(405).json({
       error: true,
@@ -71,6 +72,14 @@ exports.addBook = (req, res) => {
     });
   }
 
+  const uploadPath = `public/images/covers/${cover.name}`;
+  const cover_path = `/images/covers/${cover.name}`;
+  cover.mv(uploadPath, (error) => {
+    if (error) {
+      return console.error(error);
+    }
+  });
+
   knex("books")
     .insert({
       author_id,
@@ -78,13 +87,20 @@ exports.addBook = (req, res) => {
       description,
       language,
       genre,
-      image,
       price,
       stock,
       page_numbers,
+      cover: cover.name,
+      cover_path,
     })
-    .then((book) => {
-      const newBookURL = `books/${book}`;
+    .then(([id]) => {
+      if (!id) {
+        return res.status(500).json({
+          error: true,
+          message: "Failed to add new Author",
+        });
+      }
+      const newBookURL = `books/${id}`;
       res.status(201).location(newBookURL).send(newBookURL);
       console.log(newBookURL);
     });
