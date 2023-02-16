@@ -11,6 +11,7 @@ const cartRoute = require("./routes/cartRoute");
 const deleteRoute = require("./routes/deleteRoute");
 const loginRoute = require("./routes/loginRoute");
 const profileRoute = require("./routes/profileRoute");
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 
 app.use(cors());
 app.use(express.json());
@@ -24,6 +25,32 @@ app.use("/login", loginRoute);
 app.use("/cart", cartRoute);
 app.use("/delete", deleteRoute);
 app.use("/profile", profileRoute);
+
+// STRIPE ==========================================================================
+
+const calculateOrderAmount = (arr) => {
+  const currentTotal = arr.reduce((total, item) => total + item.price, 0);
+  return Math.round(currentTotal * 100);
+};
+
+app.post("/create-payment-intent", async (req, res) => {
+  const { cart } = req.body;
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: calculateOrderAmount(cart),
+    currency: "cad",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  const response = {
+    clientSecret: paymentIntent.client_secret,
+    paymentIntent: paymentIntent,
+  };
+
+  res.send(response);
+});
 
 app.listen(PORT, () => {
   console.log("Server is running on port: ", PORT);
